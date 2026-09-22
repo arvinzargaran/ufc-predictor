@@ -1,5 +1,4 @@
 import os
-import os
 from src.loader import load_fighters
 from src.predictor import predict
 from src.display import display_prediction
@@ -26,11 +25,10 @@ def main():
          print(f"Fighter not found: '{name2}'")
          return
 
-     fighter1 = fighters[name1]
-     fighter2 = fighters[name2]
+
 
      # Run the prediction and display the result
-     result = predict(fighter1, fighter2)
+     result = predict(name1, name2, fighters, data_dir=data_dir)
      display_prediction(result)
 
 

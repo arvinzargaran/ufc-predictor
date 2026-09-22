@@ -15,7 +15,7 @@ def display_prediction(result: dict) -> None:
     fighter2 = result["fighter2"]
 
     print(f"{'UFC FIGHT PREDICTION':^50}")
-    print(f"{fighter1.first} {fighter1.last:^50} VS  {fighter2.first} {fighter2.last}")
+    print(f"{fighter1.first_name} {fighter1.last_name:^50} VS  {fighter2.first_name} {fighter2.last_name}")
 
     _print_divider()
 
@@ -25,16 +25,28 @@ def display_prediction(result: dict) -> None:
 
     # Print the predicted winner
     print(f"{'PREDICTED WINNER':^50}")
-    print(f"{winner.first} {winner.last:^50}")
+    print(f"{winner.first_name} {winner.last_name:^50}")
 
     # Print the confidence score, formatted to one decimal place
     print(f"{'Confidence: ' + str(round(confidence, 1)) + '%':^50}")
 
     _print_divider()
 
+    # How each fighter gets it done if they win (method-of-victory model;
+    # only present when the trained model has a method head).
+    methods = result.get("methods")
+    if methods:
+        print(f"{'METHOD OF VICTORY (if they win)':^50}")
+        for name, probs in methods.items():
+            if probs is None:
+                continue
+            line = f"KO/TKO {probs['ko']:.0%}   Sub {probs['sub']:.0%}   Dec {probs['dec']:.0%}"
+            print(f"{name:<22} {line}")
+        _print_divider()
+
     # Print a stats comparison section for both fighters
     print(f"{'FIGHTER STATS':^50}")
-    print(f"{'':^20} {fighter1.first + ' ' + fighter1.last:^12} {fighter2.first + ' ' + fighter2.last:^12}")
+    print(f"{'':^20} {fighter1.first_name + ' ' + fighter1.last_name:^12} {fighter2.first_name + ' ' + fighter2.last_name:^12}")
     print()
 
     # Record
@@ -58,10 +70,15 @@ def display_prediction(result: dict) -> None:
     score2 = result["score2"]
 
     print(f"{'RAW SCORES':^50}")
-    print(f"{fighter1.first + ' ' + fighter1.last:^25}{fighter2.first + ' ' + fighter2.last:^25}")
+    print(f"{fighter1.first_name + ' ' + fighter1.last_name:^25}{fighter2.first_name + ' ' + fighter2.last_name:^25}")
     print(f"{round(score1, 4):^25}{round(score2, 4):^25}")
 
     _print_divider()
+
+    if not result.get("same_weight_class", True):
+        print("Note: these fighters are in different weight classes — take this")
+        print("prediction with a grain of salt.")
+        _print_divider()
 
 
 

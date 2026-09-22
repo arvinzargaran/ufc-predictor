@@ -1,2 +1,4 @@
 pandas
 tabulate
+scikit-learn  # only needed to retrain the model (python3 -m src.model)
+certifi       # only needed to fetch betting lines (python3 -m src.odds)

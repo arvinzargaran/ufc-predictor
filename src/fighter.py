@@ -30,9 +30,9 @@ class Fighter:
         Required args (identity + physical):
             first, last : str -- fighter's first and last name
             nickname    : str -- fighter's nickname, may be empty string
-            height      : str -- e.g. "6' 1"" stored raw from CSV
-            weight      : str -- e.g. "185 lbs"
-            reach       : str -- e.g. "74.0""
+            height      : float -- total height in inches, parsed from e.g. "6' 1""
+            weight      : float -- weight in lbs, parsed from e.g. "185 lbs."
+            reach       : float -- reach in inches, parsed from e.g. "74.0""
             stance      : str -- "Orthodox", "Southpaw", or "Switch"
             dob         : str -- date of birth e.g. "Jul / 14 / 1987"
 
@@ -50,8 +50,8 @@ class Fighter:
         self.full_name = f"{first} {last}"
 
         # --- Physical Attributes ---
-        #stored as raw strings exactly as they appear in the csv.
-        #loader.py parses it
+        # Numeric, parsed by loader.py from the raw CSV strings
+        # (height/reach in inches, weight in lbs).
 
         self.height = height
         self.weight = weight
@@ -99,11 +99,12 @@ class Fighter:
         Called automatically by print() and str().
         """
         nickname_display = f'"{self.nickname}"' if self.nickname else "No Nickname"
+        height_display = f"{int(self.height) // 12}' {int(self.height) % 12}\""
 
         return (
             f"--- {self.full_name} ({nickname_display}) ---\n"
-            f"Physical:  Height: {self.height} | Weight: {self.weight} | "
-            f"Reach: {self.reach} | Stance: {self.stance} | DOB: {self.dob}\n"
+            f"Physical:  Height: {height_display} | Weight: {self.weight:.0f} lbs | "
+            f"Reach: {self.reach:.1f}\" | Stance: {self.stance} | DOB: {self.dob}\n"
             f"Record:    {self.wins}W - {self.losses}L - {self.draws}D | "
             f"Win Rate: {self.win_rate():.1%}\n"
             f"Striking:  SLpM: {self.slpm} | Acc: {self.str_acc} | "
